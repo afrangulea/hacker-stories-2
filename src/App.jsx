@@ -27,23 +27,30 @@ const App = () => {
       objectID: 2,
     },
   ];
+
+  const handleSearch = (event) => {
+    console.log("Event Value from APP" + event.target.value);
+  };
   return (
     <div>
       <h1>My Hacker Stories</h1>
 
-      <Search />
+      <Search onSearch={handleSearch} />
 
       <List list={stories} />
     </div>
   );
 };
 
-const Search = () => {
+const Search = (props) => {
   const [searchTerm, setSearchTerm] = React.useState("");
+
   const handleChange = (event) => {
     console.log(event);
     setSearchTerm(event.target.value);
+    props.onSearch(event);
   };
+
   return (
     <form>
       <label htmlFor="input">Say hello: </label>
@@ -61,16 +68,18 @@ const List = (props) => (
   </ul>
 );
 
-const Item = (props) => (
-  <li>
-    <span>Title: {props.item.title}</span>
-    <span>
-      <a href={props.item.url}>URL</a>
-    </span>
-    <span>Comments: {props.item.num_comments}</span>
-    <span>Points: {props.item.points}</span>
-    <br /> <br />
-  </li>
-);
+const Item = (props) => {
+  return (
+    <li>
+      <span>Title: {props.item.title}</span>
+      <span>
+        <a href={props.item.url}>URL</a>
+      </span>
+      <span>Comments: {props.item.num_comments}</span>
+      <span>Points: {props.item.points}</span>
+      <br /> <br />
+    </li>
+  );
+};
 
 export default App;
