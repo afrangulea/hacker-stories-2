@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import * as React from "react";
 
 const App = () => {
@@ -28,14 +29,17 @@ const App = () => {
     },
   ];
 
+  const [searchTerm, setSearchTerm] = React.useState("");
+
   const handleSearch = (event) => {
-    console.log("Event Value from APP" + event.target.value);
+    setSearchTerm(event.target.value);
   };
+
   return (
     <div>
       <h1>My Hacker Stories</h1>
 
-      <Search onSearch={handleSearch} />
+      <Search onSearch={handleSearch} searchTerm={searchTerm} />
 
       <List list={stories} />
     </div>
@@ -43,19 +47,11 @@ const App = () => {
 };
 
 const Search = (props) => {
-  const [searchTerm, setSearchTerm] = React.useState("");
-
-  const handleChange = (event) => {
-    console.log(event);
-    setSearchTerm(event.target.value);
-    props.onSearch(event);
-  };
-
   return (
     <form>
       <label htmlFor="input">Say hello: </label>
-      <input id="input" onChange={handleChange}></input>
-      <p>Your search term is {searchTerm}</p>
+      <input id="search" onChange={props.onSearch}></input>
+      <p>Your search term is {props.searchTerm}</p>
     </form>
   );
 };
