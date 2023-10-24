@@ -35,23 +35,33 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
 
+  const filteredStories = stories.filter((story) => {
+    return story.title.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
   return (
     <div>
       <h1>My Hacker Stories</h1>
 
       <Search onSearch={handleSearch} searchTerm={searchTerm} />
 
-      <List list={stories} />
+      <List list={filteredStories} />
     </div>
   );
 };
 
 const Search = (props) => {
+  const { onSearch, searchTerm } = props;
   return (
     <form>
-      <label htmlFor="input">Say hello: </label>
-      <input id="search" onChange={props.onSearch}></input>
-      <p>Your search term is {props.searchTerm}</p>
+      <label htmlFor="input">Search for courses:</label>
+      <input
+        id="search"
+        onChange={onSearch}
+        value={searchTerm}
+        placeholder={"Type here"}
+      ></input>
+      <p>Your search term is {searchTerm}</p>
     </form>
   );
 };
