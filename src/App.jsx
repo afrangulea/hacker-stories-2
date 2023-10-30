@@ -57,21 +57,22 @@ const App = () => {
 
       <InputWithLabel
         id="search"
-        label="Search "
         type="text"
         onInputChange={handleSearch}
         value={searchTerm}
-      />
+      >
+        Search:{" "}
+      </InputWithLabel>
 
       <List list={filteredStories} />
     </div>
   );
 };
 
-const InputWithLabel = ({ id, label, type, value, onInputChange }) => {
+const InputWithLabel = ({ id, children, type, value, onInputChange }) => {
   return (
     <>
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id}>{children}</label>
       <input
         id={id}
         type={type}
