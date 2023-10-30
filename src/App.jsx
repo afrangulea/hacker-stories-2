@@ -14,7 +14,7 @@ const useStorageState = (key, initialState) => {
 };
 
 const App = () => {
-  const stories = [
+  const initialStories = [
     {
       title: "React",
       url: "https://reactjs.org/",
@@ -41,6 +41,15 @@ const App = () => {
     },
   ];
 
+  const [stories, setStories] = React.useState(initialStories);
+
+  const handleRemoveStory = (item) => {
+    const newStories = stories.filter(
+      (story) => item.objectID !== story.objectID
+    );
+    setStories(newStories);
+  };
+
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
 
   const handleSearch = (event) => {
@@ -60,20 +69,37 @@ const App = () => {
         type="text"
         onInputChange={handleSearch}
         value={searchTerm}
+        isFocused
       >
         Search:{" "}
       </InputWithLabel>
 
-      <List list={filteredStories} />
+      <List list={filteredStories} removeStory={handleRemoveStory} />
     </div>
   );
 };
 
-const InputWithLabel = ({ id, children, type, value, onInputChange }) => {
+const InputWithLabel = ({
+  id,
+  children,
+  type,
+  value,
+  onInputChange,
+  isFocused,
+}) => {
+  const inputRef = React.useRef();
+
+  React.useEffect(() => {
+    if (isFocused && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isFocused]);
+
   return (
     <>
       <label htmlFor={id}>{children}</label>
       <input
+        ref={inputRef}
         id={id}
         type={type}
         onChange={onInputChange}
@@ -85,7 +111,7 @@ const InputWithLabel = ({ id, children, type, value, onInputChange }) => {
   );
 };
 
-const List = ({ list }) => (
+const List = ({ list, removeStory }) => (
   <ul>
     {list.map((item) => (
       <Item item={item} key={item.objectID} />
@@ -93,19 +119,30 @@ const List = ({ list }) => (
   </ul>
 );
 
-const Item = ({ item }) => {
+const Item = ({ item, removeStory }) => {
   return (
-    <li>
-      <span>Title: {item.title}</span>
-      <span>Author: {item.author}</span>
-      <span>
-        <a href={item.url}>URL</a>
-      </span>
-      <span>Comments: {item.num_comments}</span>
-      <span>Points: {item.points}</span>
+    <>
+      <li>
+        <span>Title: {item.title}</span>
+        <span>Author: {item.author}</span>
+        <span>
+          <a href={item.url}>URL</a>
+        </span>
+        <span>Comments: {item.num_comments}</span>
+        <span>Points: {item.points}</span>
+      </li>
+      <Remove item={item} removeStory={removeStory} />
       <br /> <br />
-    </li>
+    </>
   );
+};
+
+const Remove = ({ item, removeStory }) => {
+  const removeItem = () => {
+    removeStory(item);
+  };
+
+  return <button onClick={removeItem}>Remove Item</button>;
 };
 
 export default App;
