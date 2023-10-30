@@ -114,7 +114,7 @@ const InputWithLabel = ({
 const List = ({ list, removeStory }) => (
   <ul>
     {list.map((item) => (
-      <Item item={item} key={item.objectID} />
+      <Item item={item} key={item.objectID} removeStory={removeStory} />
     ))}
   </ul>
 );
